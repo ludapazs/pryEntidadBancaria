@@ -39,6 +39,7 @@ public class FrmClientes extends javax.swing.JPanel {
         jComboBox1 = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
         jTextField2 = new javax.swing.JTextField();
+        jButton2 = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jPanel4 = new javax.swing.JPanel();
@@ -120,6 +121,14 @@ public class FrmClientes extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 20, 50);
         jPanel3.add(jTextField2, gridBagConstraints);
 
+        jButton2.setText("Buscar");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 50);
+        jPanel3.add(jButton2, gridBagConstraints);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -158,6 +167,7 @@ public class FrmClientes extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
