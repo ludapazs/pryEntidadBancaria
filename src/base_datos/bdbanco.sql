@@ -283,3 +283,59 @@ Begin
 	
 end;
 $$ language 'plpgsql'
+
+--conocer mes 
+Create or replace function fn_nombre_mes(mes_num int) returns character varying as
+$$
+Declare
+nom_mes character varying;
+Begin
+	case mes_num
+		when 1 then nom_mes='Enero';
+		when 2 then nom_mes='Febrero';
+		when 3 then nom_mes='Marzo';
+		when 4 then nom_mes='Abril';
+		when 5 then nom_mes='Mayo';
+		when 6 then nom_mes='Junio';
+		when 7 then nom_mes='Julio';
+		when 8 then nom_mes='Agosto';
+		when 9 then nom_mes='Setiembre';
+		when 10 then nom_mes='Octubre';
+		when 11 then nom_mes='Noviembre';
+		when 12 then nom_mes='Diciembre';
+		else nom_mes='Numero inválido';
+	end case;
+	return nom_mes;
+end;
+$$ language 'plpgsql';
+
+--consultar tarjeta por tipo y por marca juntos
+create or replace function fn_consultar_cuenta_por_moneda_cliente( cod int, marca_nombre varchar ) 
+returns table ( numero varchar, mes_exp varchar , año_exp int, cvv char(3), estado boolean, f_adqui date ) as
+$$
+Declare
+	id_marca int = (select id from marca where descripcion=marca_nombre);
+Begin
+	return query
+	select t.numero, (select fn_nombre_mes(t.mes_expiracion)) as mes_venc , t.año_expiracion, t.cvv, t.estado, t.fecha_adquisicion from tarjeta t 
+	inner join tipo_tarjeta tt on t.tipo_tarjeta_id=tt.id
+	inner join marca m on t.marca_id=m.id
+	where m.id=id_marca and tt.id=cod;
+	
+end;
+$$ language 'plpgsql'
+
+--consultar movimiento por tipo, por canal
+create or replace function fn_consultar_movimientos_por_canal_tipo_movimiento ( tipo int, canal int ) 
+returns table ( numero_cuenta varchar, monto money, fecha date ) as 
+$$
+Declare
+Begin
+	return query
+	select c.numero, m.monto, m.fecha from movimiento m
+	inner join tipo_movimiento tp on m.tipo_movimiento_id=tp.id
+	inner join cuenta c on m.cuenta_id=c.id
+	inner join canal cn on m.canal_id=cn.id
+	where m.canal_id=canal and tp.id=tipo;
+end;
+$$ language 'plpgsql'
