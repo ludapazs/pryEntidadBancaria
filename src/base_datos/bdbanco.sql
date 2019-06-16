@@ -228,3 +228,25 @@ Begin
 	where m.canal_id=ident;
 end;
 $$ language 'plpgsql'
+
+--consultar cuenta por sucursal
+create or replace function fn_consultar_cuenta_por_sucursal( cod int ) 
+returns table ( nombre text, numero varchar, descrip_tm varchar, descrip_sucursal varchar, descrip_dpto varchar, descrip_prov varchar ) 
+as
+$$
+Declare	
+Begin
+	return query
+	select c.nombres ||' '||c.apellido_paterno||' '||c.apellido_materno as nombre, ct.numero, tm.descripcion, s.descripcion,
+	dpto.descripcion , p.descripcion
+	from cuenta ct
+	inner join cliente c on mf.cliente_id=c.id
+	inner join tipo_moneda tm on ct.tipo_moneda_id=tm.id
+	inner join sucursal s on cnt.sucursal_id=s.id
+	inner join ubigeo u on s.sucursal_id=u.id
+	inner join departamento dpto on u.departamento_id=dpto.id
+	inner join provincia p on u.provincia_id=p.id
+	where s.id=cod;
+	
+end;
+$$ language 'plpgsql'
