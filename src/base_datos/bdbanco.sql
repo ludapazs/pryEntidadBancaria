@@ -197,3 +197,5 @@ CREATE TABLE MOVIMIENTO_FRECUENTE (
     cuota_id                INT                 NULL REFERENCES CUOTA,
     servicio_brindado_id    INT                 NULL REFERENCES SERVICIO_BRINDADO
 );
+
+alter table movimiento_frecuente add column monto money null
