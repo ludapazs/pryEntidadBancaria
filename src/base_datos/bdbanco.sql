@@ -240,13 +240,46 @@ Begin
 	select c.nombres ||' '||c.apellido_paterno||' '||c.apellido_materno as nombre, ct.numero, tm.descripcion, s.descripcion,
 	dpto.descripcion , p.descripcion
 	from cuenta ct
-	inner join cliente c on mf.cliente_id=c.id
+	inner join cliente c on ct.cliente_id=c.id
 	inner join tipo_moneda tm on ct.tipo_moneda_id=tm.id
-	inner join sucursal s on cnt.sucursal_id=s.id
-	inner join ubigeo u on s.sucursal_id=u.id
+	inner join sucursal s on ct.sucursal_id=s.id
+	inner join ubigeo u on s.ubigeo_id=u.id
 	inner join departamento dpto on u.departamento_id=dpto.id
 	inner join provincia p on u.provincia_id=p.id
 	where s.id=cod;
+	
+end;
+$$ language 'plpgsql'
+
+--consultar cuenta por moneda
+create or replace function fn_consultar_cuenta_por_moneda_cliente( cod varchar, dni varchar ) 
+returns table ( nom text, numero_cuenta varchar, descrip varchar ) as
+$$
+Declare
+	
+Begin
+	return query
+	select c.nombres ||' '||c.apellido_paterno||' '||c.apellido_materno as nombre, ct.numero, tm.descripcion from cuenta ct
+	inner join cliente c on ct.cliente_id=c.id
+	inner join tipo_moneda tm on ct.tipo_moneda_id=tm.id
+	where tm.codigo=cod and c.numero_documento=dni;
+	
+end;
+$$ language 'plpgsql'
+
+--consultar movimientos frecuentes
+create or replace function fn_consultar_movimientos_frecuentes( dni varchar ) 
+returns table (nom text, ) as
+$$
+Declare
+	id int = (select id from cliente where numero_documento=dni);
+Begin
+	return query
+	select c.nombres ||' '||c.apellido_paterno||' '||c.apellido_materno as nombre, cnt.numero from movimiento_frecuente mf
+	inner join cliente c on mf.cliente_id=c.id
+	inner join tipo_movimiento tm on mf.tipo_movimiento_id=tm.id
+	inner join cuenta cnt on mf.cuenta_id=cnt.id
+	where c.id=id;
 	
 end;
 $$ language 'plpgsql'
