@@ -199,3 +199,18 @@ CREATE TABLE MOVIMIENTO_FRECUENTE (
 );
 
 alter table movimiento_frecuente ADD monto money null; 
+
+--consultar prestamos por cliente
+create or replace function fn_consultar_prestamos_por_cliente(dni varchar) 
+returns table( des varchar, f_solicitud date, f_aprobacion date, monto money, tasa float, cuotas int, est char ) as
+$$
+Declare
+	id int = (select c.id from cliente c where c.numero_documento=dni);
+Begin
+	return query
+	select tp.descripcion, p.fecha_solicitud, p.fecha_aprobacion, p.monto_total,  p.tasa_mensual, p.numero_cuotas, p.estado
+	from prestamo p 
+	inner join tipo_prestamo tp on p.tipo_prestamo_id=tp.id 
+	where p.cliente_id=id;
+end;
+$$ language 'plpgsql'
