@@ -214,3 +214,17 @@ Begin
 	where p.cliente_id=id;
 end;
 $$ language 'plpgsql'
+
+--consultar movimientos por canal
+create or replace function fn_consultar_movimientos_por_canal ( ident int ) 
+returns table ( descrip varchar, numero varchar, monto money, fecha date ) as 
+$$
+Declare
+Begin
+	return query
+	select tp.descripcion, c.numero, m.monto, m.fecha from movimiento m 
+	inner join tipo_movimiento tp on m.tipo_movimiento_id=tp.id
+	inner join cuenta c on m.cuenta_id=c.id
+	where m.canal_id=ident;
+end;
+$$ language 'plpgsql'
