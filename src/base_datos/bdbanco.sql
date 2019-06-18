@@ -339,3 +339,30 @@ Begin
 	where m.canal_id=canal and tp.id=tipo;
 end;
 $$ language 'plpgsql'
+
+--insertando en tabla canal
+insert into canal (descripcion) values ('Agente');
+insert into canal (descripcion) values ('Banca Móvil');
+insert into canal (descripcion) values ('Banca por internet');
+insert into canal (descripcion) values ('Cajeros automáticos');
+insert into canal (descripcion) values ('Agencias');
+
+--insert en la tabla tipo cliente
+select * from tipo_cliente
+
+insert into tipo_cliente (descripcion) values ('Persona natural');
+insert into tipo_cliente (descripcion) values ('Persona jurídica');
+
+--insert dentro de tipo_moneda
+select * from tipo_moneda
+
+insert into tipo_moneda (codigo,descripcion) values ('SOL','Sol');
+insert into tipo_moneda (codigo,descripcion) values ('EUR','Euro');
+insert into tipo_moneda (codigo,descripcion) values ('USD','Dólar');
+insert into tipo_moneda (codigo,descripcion) values ('JPY','Yen');
+insert into tipo_moneda (codigo,descripcion) values ('MXN','Peso Mexicano');
+
+--insert en la tabla tipo tarjeta
+select * from tipo_tarjeta
+insert into tipo_tarjeta (descripcion) values ('Débito');
+insert into tipo_tarjeta (descripcion) values ('Crédito');
